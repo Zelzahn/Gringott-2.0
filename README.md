@@ -10,13 +10,13 @@ This bot exclusively uses Discord's new slash-commands, so just type `/` to see 
 ## Installation
 
 ```bash
-$ echo "[BOT TOKEN]" > .env
+$ echo "BOT_TOKEN=[BOT TOKEN]" > .env
 
 # Docker
 $ docker-compose up -d --build
 
 # If no docker is installed
-$ echo "[MONGODB URL]" >> .env
+$ echo "MONGODB_URL=[MONGODB URL]" >> .env
 $ export $(cat .env | xargs)
 $ npm i
 $ npm run prod
