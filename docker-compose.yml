@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  node:
+    container_name: gringott
+    restart: always
+    build: .
+    environment:
+      - MONGODB_URL=mongodb://mongo:27017/gringott
+      - BOT_TOKEN
+  mongo:
+    container_name: gringott_db
+    image: mongo
+    expose:
+      - 27017
+    volumes:
+      - mongodb:/data/db
+
+volumes:
+ mongodb:
