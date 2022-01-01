@@ -14,7 +14,7 @@ export const client = new Client({
     Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
   ],
   // If you only want to use guild commands, uncomment this line
-  botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
+  // botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
   // silent: true,
 });
 

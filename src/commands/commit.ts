@@ -52,7 +52,6 @@ export abstract class commit {
         "Please keep the message length underneath 255 characters"
       );
 
-    console.log("interaction :>> ", interaction);
     const guildId = interaction.guildId;
 
     // Bad input checks
