@@ -24,6 +24,8 @@ const printItem = (item: IItem) =>
 export class items {
   @Slash("list", { description: "List all items" })
   async list(interaction: CommandInteraction) {
+    await interaction.deferReply();
+
     const items = await getItems(interaction.guildId);
     // items = items.filter(({ isDeleted }) => !isDeleted);
 
