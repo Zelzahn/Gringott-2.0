@@ -16,8 +16,6 @@ import {
 } from "../database/mongo";
 import { table } from "table";
 import { client } from "../client";
-import { IUser } from "../database/Schematics/User";
-import { IItem } from "../database/Schematics/Item";
 
 @Discord()
 @SlashGroup("resolve", "See and resolve outstanding payments")
@@ -34,14 +32,13 @@ export abstract class resolve {
     const users = await getUsers(guildId);
     const summary = new Map<string, number>();
 
-    users.forEach((user: IUser) => summary.set(user.userId, 0));
+    users.forEach((user) => summary.set(user.userId, 0));
 
     for (const expense of expenses) {
       const value =
         expense.item.type === "custom"
           ? expense.item.value
-          : items.filter((item: IItem) => item._id.equals(expense.item.item))[0]
-              .value;
+          : items.filter((item) => item._id.equals(expense.item.item))[0].value;
 
       summary
         .set(expense.from.userId, summary.get(expense.from.userId) ?? 0 - value)
@@ -101,13 +98,14 @@ export abstract class resolve {
     if (collected.get("❌")) {
       await message.reply("Cancelled the pay back.");
       return;
-    } else
-      payBack(guildId, person.id)
-        .then(() => {
-          message.reply(`Succesfully paid back ${person}`);
-        })
-        .catch((e: any) => {
-          throw new Error(e);
-        });
+    } else const guildId = interaction.guildId;
+    if (guildId === null) throw new Error("guildId is null");
+    payBack(guildId, person.id)
+      .then(() => {
+        message.reply(`Succesfully paid back ${person}`);
+      })
+      .catch((e) => {
+        throw new Error(e);
+      });
   }
 }

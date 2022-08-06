@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { Intents } from "discord.js";
+import { GatewayIntentBits } from "discord.js";
 import { Client } from "discordx";
 import { importx } from "@discordx/importer";
 
@@ -8,10 +8,10 @@ export const client = new Client({
     prefix: "g!",
   },
   intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MEMBERS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions,
   ],
   // If you only want to use guild commands, uncomment this line
   // botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
@@ -26,7 +26,7 @@ client.once("ready", async () => {
   });
 
   // init permissions; enabled log to see changes
-  await client.initApplicationPermissions(true);
+  // await client.initApplicationPermissions(true);
 
   console.log("Bot started");
 });

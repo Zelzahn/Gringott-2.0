@@ -1,6 +1,6 @@
 import {
   CommandInteraction,
-  MessageEmbed,
+  EmbedBuilder,
   Message,
   ReactionEmoji,
   GuildEmoji,
@@ -26,10 +26,12 @@ export class items {
   async list(interaction: CommandInteraction) {
     await interaction.deferReply();
 
-    const items = await getItems(interaction.guildId);
+    const guildId = interaction.guildId;
+    if (guildId === null) throw new Error("guildId is null");
+    const items = await getItems(guildId);
     // items = items.filter(({ isDeleted }) => !isDeleted);
 
-    const embed = new MessageEmbed().setTitle("Configured items:");
+    const embed = new EmbedBuilder().setTitle("Configured items:");
 
     if (items.length > 0) {
       let left = "";
@@ -67,7 +69,9 @@ export class items {
   ) {
     if (amount <= 0) throw new Error("Amount should be a valid number >= 0");
 
-    await createItem(interaction.guildId, name, amount, desription)
+    const guildId = interaction.guildId;
+    if (guildId === null) throw new Error("guildId is null");
+    await createItem(guildId, name, amount, desription)
       .then(() => {
         interaction.reply(`Succesfully added ${name}`);
       })
@@ -103,7 +107,9 @@ export class items {
   ) {
     if (amount <= 0) throw new Error("Amount should be a valid number >= 0");
 
-    await updateItem(interaction.guildId, name, amount, desription)
+    const guildId = interaction.guildId;
+    if (guildId === null) throw new Error("guildId is null");
+    await updateItem(guildId, name, amount, desription)
       .then(() => {
         interaction.reply(`Succesfully updated ${oldName}`);
       })
@@ -121,7 +127,7 @@ export class items {
   ) {
     if (!doesItemExist) throw new Error("The name doesn't match any item");
 
-    const deleteConfirmationEmbed = new MessageEmbed()
+    const deleteConfirmationEmbed = new EmbedBuilder()
       .setTitle("Item deletion")
       .setDescription(`Please confirm that you want to delete: ${name}`);
 
@@ -150,13 +156,14 @@ export class items {
     if (collected.get("❌")) {
       await message.reply("Cancelled the deletion.");
       return;
-    } else
-      deleteItem(interaction.guildId, name)
-        .then(() => {
-          message.reply(`Succesfully deleted ${name}`);
-        })
-        .catch((e) => {
-          throw new Error(e);
-        });
+    } else const guildId = interaction.guildId;
+    if (guildId === null) throw new Error("guildId is null");
+    deleteItem(guildId, name)
+      .then(() => {
+        message.reply(`Succesfully deleted ${name}`);
+      })
+      .catch((e) => {
+        throw new Error(e);
+      });
   }
 }

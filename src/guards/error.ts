@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageEmbed } from "discord.js";
+import { CommandInteraction, EmbedBuilder } from "discord.js";
 import { GuardFunction } from "discordx";
 
 export const ErrorHandler: GuardFunction<CommandInteraction> = async (
@@ -12,7 +12,7 @@ export const ErrorHandler: GuardFunction<CommandInteraction> = async (
     console.log("err :>> ", err);
 
     const errorMessage = err instanceof Error ? err.message : "unknown error";
-    const embed = new MessageEmbed({
+    const embed = new EmbedBuilder({
       title: "Oops!?",
       description: interaction.user + " " + errorMessage,
       color: "#fcc9c5",

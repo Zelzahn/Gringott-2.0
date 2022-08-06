@@ -1,4 +1,4 @@
-import { CommandInteraction, MessageEmbed, User } from "discord.js";
+import { CommandInteraction, EmbedBuilder, User } from "discord.js";
 import { Discord, Slash, SlashOption, SlashGroup, Guard } from "discordx";
 import {
   getUserId,
@@ -6,10 +6,10 @@ import {
   doesItemExist,
   getAllExpenses,
 } from "../database/mongo";
+import { Pagination, PaginationResolver } from "@discordx/pagination";
 import { ErrorHandler } from "../guards/error";
 import { table } from "table";
 import { client } from "../client";
-import { Pagination, PaginationResolver } from "@discordx/utilities";
 
 const getUserFromMention = (mention: string) => {
   const matches = mention.match(/[0-9]+/);
@@ -53,6 +53,8 @@ export abstract class commit {
       );
 
     const guildId = interaction.guildId;
+
+    if (guildId === null) throw new Error("guildId is null");
 
     // Bad input checks
     // Check that payers are valid persons
@@ -121,6 +123,7 @@ export abstract class commit {
   @Slash("list", { description: "Shows a list of the expenses" })
   async list(interaction: CommandInteraction) {
     const guildId = interaction.guildId;
+    if (guildId === null) throw new Error("guildId is null");
     const expenses = await getAllExpenses(guildId);
 
     const populatedExpenses: string[][] = await Promise.all(
@@ -160,7 +163,7 @@ export abstract class commit {
 
       await pagination.send();
     } else {
-      const embed = new MessageEmbed().setTitle("Expenses");
+      const embed = new EmbedBuilder().setTitle("Expenses");
       embed.setDescription("No expenses made yet");
       interaction.reply({ embeds: [embed] });
     }
